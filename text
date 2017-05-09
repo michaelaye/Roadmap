@@ -1,0 +1,237 @@
+Solar System Science Collaboration Roadmap: A starting point
+      
+The goal of our science is to understand planetary formation and evolution, including placing the Solar System in context with other planetary systems. This requires an understanding of the current status of our Solar System -- the orbital and size distributions of small bodies (e.g. asteroids, comets, planetary satellites, TransNeptunian Objects, Scattered Disk Objects, and other intermediary populations) and their physical properties (e.g. chemical composition, physical shape, masses, density and porosity).  LSST will report detections of moving objects in various filters (ugrizy) between approximately 16 and 24.5 magnitudes (in r band) over its observing footprint, link these detections into orbits, and provide metadata on observing conditions, including a generalized completeness estimate for each population. However, it will be up to us to apply a wide variety of methods to translate this information into the data we need to accomplish our scientific goals. 
+
+
+
+What will LSST provide? 
+This list isn’t intended to be exhaustive, but should capture the main points of what LSST will provide so that we can identify what additional analysis or capabilities we need. The LSST Data Products Document (http://ls.st/dpdd) is the authoritative source; this just an interpretation of that document. LSST will: 
+image the sky with a cadence generally appropriate for detecting small moving objects in the Solar System in filters ugrizy over the southern hemisphere, with a northern extension to cover the ecliptic plane + 10 degrees (this ‘northern ecliptic spur’ may only be imaged in griz). More about the observing footprint and plan can be found at http://www.lsst.org/lsst/opsim and simulations of the observing history can be found at https://www.lsstcorp.org/?q=opsim/home. The observing cadence is not ‘set in stone’ and is open to feedback. 
+create “difference images” where the images in each visit are subtracted from a template image to detect moving objects (plus transient and variable sources) -- these difference image detected sources (diaSources) must appear at 5-sigma above the sky background. In addition, the two exposures within a visit will be subtracted from each other to look for extremely rapidly varying objects.
+report diaSources via an Alert stream (like VOEvents) within 60s of taking each image. These alerts will include transients and variables and will not include linking between different visits, but known moving objects (as well as known variables) will be identified with coincident detections in the alerts. The alert information will include measurements of trailing (to identify very fast moving NEOs, even if unknown) and identification of non-stellar PSFs (to identify outbursts or cometary activity). 
+link diaSources from each visit within a night into tracklets, then between nights into tracks, and from there determine orbits -- only diaSources which can be fit to orbits with reasonable residuals are reported as movingObjects. More information on this linking procedure is available in the document at bit.ly/MOPSbaselinePDF. 
+(two diasources per night is the current requirement to make a tracklet)
+link additional diaSources into previously known or newly discovered movingObjects to extend the orbital arc for each object (as new images are taken or as new objects are discovered).
+(three tracklets within 15 nights is the current requirement to make a track .. goal is to extend this window to 30 nights)
+evaluate the completeness of the survey for moving objects by running the detection pipeline on artificial sources from a predefined source (such as the S3M, Grav et al 2011).
+provide metadata on observing conditions, such as the telescope pointing history, seeing history, cloud conditions, and estimated 5-sigma limiting magnitudes in the difference images for each visit.
+provide access to both the movingObject (i.e. orbits) and observations associated with that movingObject (i.e. the observations themselves, called Sources when measured images or diaSources when measured in difference images) in an online searchable database; this information will be available in Data Release  (DR) database versions as well as an up-to-date database (i.e. kept up to date with daily moving object processing). The up-to-date db may suffer discontinuities as DR processing is added back into up-to-date db or as observations are added or removed from linkages.  More information on the quantities to be measured and stored in catalogs for each diaSource (bit.ly/MOPSdiaSource), Source (bit.ly/MOPSsource) and movingObject (bit.ly/MOPSmovingObject) can be found at the indicated links.
+provide measurements of each Source with absolute astrometry accurate to better than 0.05” and relative astrometry precise to 0.01” over spatial scales of a few tens of arcminutes after Data Release processing; absolute photometry will be accurate to 10 mmag for bright (r<20) sources and relative photometry precise to 5 mmag for observations over spatial scales small relative to the visible sky in griz (7 mmag in uy) after Data Release processing.
+provide access to postage stamps of each diaSource and/or Source for a particular movingObject as requested, as well as supply postage stamps LSST images which match a user-defined orbit or user-defined RA/Dec/time regions.
+provide the capability to do forced photometry (or low-threshhold object detection) along a user-supplied orbit.
+provide catalog and image query capabilities through a Science User Interface (SUI), where users can select catalog entries or images of interest and download the results. 
+provide computer resources through Data Centers for extended analysis of catalogs or images (such as coadding visits for detection of fainter objects, running clustering analysis on MBAs, etc.), where the analysis routines are written by users and interface with APIs provided by LSST. Available resources are expected to be on the order of 10% of the LSST Data Release processing capabilities.
+
+These basic capabilities mean we will have orbital distributions for large populations of Solar System objects, which can be de-biased using either the nominal completeness function or a user-supplied ‘truth’ population (through the metadata on observing history), with accurate photometry in multiple bandpasses and accurate astrometry. We will have color information, although objects will be measured in different filters at different times (with a variety of times between measurements that could vary from a few minutes to many days or months). We will have lightcurve information, including upper limit data points where LSST could not detect a source, although these lightcurves will have variable time sampling. The catalogs will include measurements of the PSF of each source (and a measurement of the deviation from the stellar PSF) and we will be able to retrieve cutout images of each source to search for outbursts or cometary activity; markers of activity will also be reported in nightly alerts. We will be able to ask for forced photometry or low-SNR object detection along a user-defined orbit, in order to look for detections of objects which may have fallen below the 5-sigma diaSource threshhold. We will be able to ask for subsets of the data (images or catalogs) for further analysis outside the LSST system, and we will be able to ask for computer resources to carry out larger catalog or image analysis on machines colocated with the data. 
+
+As an estimate of how big this data will be: in the LSST Science Book we predicted sample sizes on the order of 100K NEAs, 5.5M MBAs, 280K Jupiter Trojans, and 20-40K TNOs and SDOs (Table 5.2), with between 200-350 observations per object (for bright objects) (Figure 5.4). 
+
+
+
+
+
+
+Collaboration activities to be spelled out in the roadmap: There are some basic questions related to how LSST is producing data that we should weigh in on but there are also longer term ‘roadmap’ questions related to how we need to prepare to analyze the data, some of which are hinted at the paragraphs above or relate to what additional information may be needed to accomplish our science goals. Some of these tasks may be most appropriate to address as individual investigators or independent teams, while other tasks - especially if they are crucial to our overall goals -  may be best served by organizing as a community to be sure they are addressed. These are tasks we need to identify and plan for.
+
+Where do we need to specify/evaluate/add requirements on the data products provided by LSST? 
+We need to evaluate the observing cadence for Solar System studies, and determine our requirements (both basic, minimum requirements and optimal, desired requirements). By giving the project enough feedback to balance our requirements with other groups, we are most likely to get what we need in terms of observing cadence. 
+We need to evaluate what level of completeness is required for various Solar System populations, based on science goals, as this ties in with both the observing cadence requirements and completeness requirements for MOPS linkages. A draft with preliminary completeness requirements is at https://dev.lsstcorp.org/cgit/contrib/solar_system_requirements.git/plain/ssoreq.pdf; are these requirements and completeness levels appropriate?
+We need to specify how the values defined for movingObject (bit.ly/MOPSmovingObject) will be calculated (such as albedo and pole locations) and define what the final revision of this table, as well as the diaSource and Source tables, should look like. 
+We should help define how we want or need the up-to-date database to be reconciled with the Data Release database, and what kind of consistency we need in the up-to-date db (i.e. Data Release db will be stable over time by definition, but the up-to-date db may change as objects are refined and previous observations added or removed from linkages).
+We need to identify problems with or gaps in the data produced by or analysis capabilities provided by LSST vs what we need for doing science. 
+
+
+Some preliminary science-related questions to address:
+How sufficient are the colors derived from LSST measurements:
+For understanding relationships between populations (Trojans & Centaurs & TNOs & SDOs & Incoming Oort Cloud Objects, for example)?
+For determining MBA albedos (from which to determine their sizes) & general taxonomy (and what constraints does this provide on the chemical composition)? 
+For determining NEO albedos (and thus sizes)? 
+What additional tools do we need to calculate colors from measurements obtained at different times? How do we account for (or potentially benefit from) phase curve effects, which can be different in different band passes? How do we account for potential light curve effects? What kind of errors should we expect on colors, and can the range of these errors be characterized for different populations?
+How sufficient are the lightcurves which could be derived from LSST measurements: 
+For understanding shape or albedo distributions?
+For sparse lightcurve inversion for accurate shapes of specific objects?
+For determining pole distributions of MBAs?
+What tools do we need for calculating light curves for different populations given varying observing cadences? What kind of errors can we expect? What additional data might be useful?
+What tools do we need to have to understand the debiased populations?
+What models are needed to link the observed (biased) populations with Solar System evolution - models of early Solar System formation are sometimes (often?) terminated before evolving over the lifetime of the Solar System so don’t include later gravitational sculpting.
+The same (or very similar) code that MOPS uses to generate completeness estimates could be used to generate completeness estimates for user-specified populations, but could be quite time-consuming if the entire Solar System (plus the user-specified population) must be simulated. Is this necessary, or can just the user-specified population be simulated -- what effect does confusion from other linkages create? 
+What additional information (if any) is needed to translate from the observed luminosity and distance/orbit distributions to underlying size distributions?
+For MBAs and NEOs we know there is a distribution of albedos, but we also know there is a correlation with color. How good is this correlation and what is the final error in the size distribution (is this error appropriate for science requirements)? 
+We know collisional families influence the calculation of the size distribution (as we usually need to know the background size distribution or the family size distribution separately). How can we  separate families and background populations - what tools do we need, or what calculations must be done, and do existing tools scale to the 5.5M MBAs expected to be discovered with LSST?
+For TNOs, we know there is a distribution of albedos; how do we account for this when attempting to interpret the size distribution? What about binaries in the observed population (which influence the measured luminosity function)?
+How can we identify binaries in the catalogs?
+Wide binaries? Will these confuse orbit fitting?
+Sometimes-resolved binaries? Can we find these through astrometric residuals, light curves, shape measurements? 
+How many binaries should we expect to find in LSST? 
+How do we identify outbursts or cometary activity in the moving objects? 
+Will the measurements provided by LSST DM be sufficient? If not, can we define additional measurements that can be routinely carried out by DM and added to the catalogs? 
+How do we understand relationships between different populations? Colors, binary fractions, volatile activity, physical characteristics can help but we will need new models as well. Are there particular observations or measurements that would help spur on this activity, and/or are there model predictions we should be testing? 
+How can we incorporate multi-wavelength measurements with LSST catalogs to determine albedos for many objects? 
+How should this information be folded back into determining the underlying population’s orbital or size distributions (i.e. if there are many ‘dark’ objects)? 
+How will this information tie in with LSST’s precision astrometry measurements over long time periods to help measure Yarkovsky and YORP effects?
+What other datasets might we want to incorporate with LSST data? 
+Additional lightcurve (or even individual observation) data so that longer term light curves or phase curves or colors can be derived? (e.g. adding PanStarrs, DES and other survey measurements to LSST measurements)
+Computed proper orbital elements? 
+Family identifications? 
+Spectral information? 
+A database combining spectra from many MBAs (potentially from many sources) with their observed LSST colors, orbital parameters, and lightcurves (and phase curves) could perhaps identify additional physical characteristics or features common to small groups of MBAs, and would be useful for a variety of scientific investigations. 
+
+
+Some specific examples of things to work on short-term
+Develop a roadmap (with dates and more detailed work plan)
+Push on solar system simulations
+MAF simulations to specify requirements on cadence
+MOPS simulations to specify requirements on MOPS
+Develop tools for working with large datasets - coordinate with other science collaborations, such as Transients/Variables and AstroInformatics 
+determining light curves
+identifying binaries
+identifying family clusters
+Work with precursor surveys / archival studies
+learn to work with large data sets
+learn to work with data sets with non-optimal / non-standard cadences
+learn more about the solar system - underlying theory advances -> learn more from LSST (and know where we need to learn more) & improve models feeding into LSST simulations (improve orbital models, add lightcurve simulations, color simulations, unusual objects...)
+Develop real and/or simulated databases
+for lightcurve retrieval
+joining with data from other sources & other wavelengths
+data access patterns - database capabilities
+what information should be present for each object? forced photometry?
+Feedback to LSST Data Management Software
+requirements (15s exposures vs visits)
+shape measurements for binary determination
+Alert requirements
+MOPS up-to-date database vs. Data Release database & their integration
+requirements on MOPS & linking to non-MOPS detections
+Alternative detection algorithms to MOPS
+Really slow-moving objects? Detections when objects appear stationary?
+Followup and supplemental observations
+observations at other wavelengths
+observations with different cadences (lightcurve improvements)
+observations of very fast moving objects
+Train students
+Citizen science & outreach
+
+
+
+
+
+
+LSST MOPS/pairs evaluation plan 
+     image differencing
+     MOPS performance (with false positives)
+          how many false positives before false linkages pass orbit determination?
+          completeness / observations (with various cadences)
+what fraction do we only get to see for one night? what would we lose if we only have one night / not 15 nights? what is average ‘availability for observation/characterization’ after LSST reports object? (especially availability for radar / distance factor - what fraction do we need to detect?) 
+---- Much of this is addressed in Icarus paper (in review).
+
+
+albedos  - joining measurements in IR from other sources
+
+do we need y band and/or u band in NES?
+   what fraction of objects do we want y and/or u data? 
+
+do we include previous survey results? 
+
+with single survey: how do we debias populations (i.e. to investigate relative numbers of objects in each population?)
+
+what is binary fraction across different populations? how do we compare binary fraction across different populations?  how do we know objects are binary? how can observed fraction be debiased to true fraction? 
+     detections through mutual events
+     extended shapes for non-resolved objects
+     see as resolved binary (TNO) - but does this confuse MOPS?
+astrometric residuals in orbit?   
+
+how much will color information translate to physical properties? (taxonomic class?) does orbital information help? 
+
+understand how colors affected by non-simultaneous measurement? do we have any hope of determining color variability? 
+
+determining lightcurves - see http://arxiv.org/abs/1504.04041 as example
+ (single opposition) and recovering colors
+what is optimum method for determining lightcurve? 
+precursor science! 
+
+how do we determine pole positions for large fraction of LSST asteroids? (algorithm improvements or scaling issues?) 
+how do we find activity? what measurements do we need from DM? how do we debias observed fraction objects with activity?
+
+how do we measure masses?
+    astrometric residuals for wide binaries (TNO)? 
+
+
+Building solar system models: 
+         orbital distributions - 
+         unusual populations? 
+         color distribution
+         size distribution
+         rotation periods/pole positions
+         phase curve?
+
+
+
+metrics needed
+** completeness -- need `fiducial’ source populations
+** ‘uniformity’ of completeness (not missing any particular populations or subgroups or coverage - inclination, ecliptic latitude/longitude, orbital elements)
+discovery of objects on hyperbolic objects 
+very distant large objects (distinguish between models?)
+earth trojan population
+IEO
+trojans of outer planets (perhaps want increased completeness? or deeper mag limits so get smaller objects?)
+planetary satellites
+“DISCOVERY OPPORTUNITY”
+** capability of period recovery
+** capability of measuring color
+depends on phase coverage, color measurements (and times of colors), correcting for lightcurve 
+if you have a shape model, how much better can you do? (need pole position)
+color -> albedo (gri - statistical .. light/dark)
+phase curve -> color & albedo as well 
+differentiate between things with 1micron bands vs. not (y band? additional info, identify vestoids)
+with color + phase curve - what is uncertainty on albedo?
+** measure size frequency distribution (for specific dynamical classes) - number of detections + colors [wiggles in size distribution -> particular number of objects needed at a given H mag?] (plus in outer solar system, down to small sizes, to learn collisional/formation history - do planetesimals form large or small?)
+all above, as function of time
+lightcurve inversion
+detection of activity
+by morphology - see algorithm development below as to “how do we detect activity”
+what is timescale for activity?
+non-gravitational effects on orbit + what would be lost as a result
+
+
+NEO problems
+    orbit/discovery/colors/characterization of NEOs motivated by history / source in main belt. determine rate of injection into NEOs. need orbit, then colors/characterization tell about history as NEO (space weathering? source location? Yarkovsky/YORP tell about how NEOs evolve?). want to know ratio of dark to light. how well does information on big objects translate to small objects. If we just do ‘bright, well-sampled objects’, how does that translate to rest of the population? 
+
+tools needed
+      level3 tool to do low SNR source detection over uncertainty ellipse
+      model SFD determination (from number of objects + colors -> albedos, with uncertainties on colors due to non-simultaneous colors)
+
+      model effects of non-simultaneous color measurements 
+generate lightcurve models http://astro.troja.mff.cuni.cz/projects/asteroids3D/web.php - distribution of axis ratios and pole orientations and rotation periods
+         pole orientations - small asteroids spin close to orbit plane (?) (YORP)
+          ? -- we create lightcurves with range of observational arc (according to opsim, and at variety of cadences) - you try to recover period, color, phase curve, etc - whatever you can. 
+
+ describe method for color + phase -> albedo + distance + mag -> size (and errors)
+
+precursor observations needed?
+          list existing/ongoing surveys that are relevant (‘precursor’ but not LSST specific)
+
+new algorithms to be developed
+    shift-and-stack improvements for objects closer than TNOs (TALCS?)
+   testing algorithms in development - need funding for using & developing new methods, even on existing data
+
+** precursor obs to develop algorithms for identifying activity (MBC and comets and centaurs) - need PSF and depth .. does the data exist?  subaru archive with known comets?
+how to incorporate non-gravitational effects into orbits ; orbit determination / linking / precovery/recovery when non-gravitational effects become important relative to astrometric precision. Is LSST going to miss or lose other classes of objects if we cannot fit an orbit (and thus don’t see as an ‘object’ or perhaps just don’t link to the previous object)? (especially if time sensitive)   -- non-keplerian motion within MOPS linkage time; also when orbit linking. 
+examples: near Earth, asteroid collisions - new orbits, cometary orbits with non-grav.
+
+   process PTF/ZTF/Decam data to LSST data products level; analyze results (will this change how surveys processed today? will it change what we expect from LSST?) 
+
+
+
+model/theory advancements
+             e.g. if we measure size distribution of MBAs, what does that mean? (does it correlate with age? how does theory interact with observations? what level of accuracy do we need to measure size distribution, given different models?)
+             we need models that generate predictions testable by observations (and alternate models) → why do we need a given level of completeness / number of objects
+
+systematics in measurements
+
+
+Challenge: What would you do with 10x more MBAs/NEOs/TNOs/etc?
+
+
+can you use LSST image processing or image differencing?
+encourage collaborations with existing surveys - can data be used as precursor data, can LSST processing help survey, what tools can be shared
+
+
